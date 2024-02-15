@@ -1,0 +1,31 @@
+
+
+#root {
+  
+  height: 100vh;
+  text-align: center;
+ 
+  
+}
+
+
+
+.login {
+  
+  /* display: flex;
+  justify-content: center; */
+
+  
+ 
+  padding-top: 15vh;
+  
+}
+
+@media (min-width: 768px) {
+.login {
+  display: flex;
+  justify-content: center;
+}
+  
+  
+}
