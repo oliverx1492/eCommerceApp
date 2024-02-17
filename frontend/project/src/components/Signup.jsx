@@ -1,8 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 const Signup = () => {
+
+    useEffect( ()=> { 
+        const token = localStorage.getItem("token")
+        if(token) {
+            navigate("/")
+        }
+
+        
+    },[] )
 
     const [message, setMessage] = useState()
      //dieser usestate nur zum style
@@ -15,8 +24,8 @@ const Signup = () => {
 
         setMessage("")
 
-        console.log("first")
-
+        
+        console.log(data)
         try {
             const response = await fetch("http://localhost:5000/signup", {
                 method: "POST",
@@ -48,7 +57,7 @@ const Signup = () => {
             console.log(error)
         }
 
-        console.log("second")
+        
     }
 
     return (
@@ -106,7 +115,7 @@ const Signup = () => {
                             {errors.repeat_password.message}
                         </div>}
 
-                        <button disabled={isSubmitting} className="btn btn-success">Login</button>
+                        <button disabled={isSubmitting} className="btn btn-success">Sign Up</button>
                         <hr />
                         <p>Already have an account? <Link to="/login">Login here</Link></p>
                     </form>

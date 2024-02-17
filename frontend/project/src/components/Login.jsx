@@ -1,8 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form"
 
 const Login = () => {
+    
+    useEffect( ()=> {
+        const token = localStorage.getItem("token")
+        if(token) {
+            navigate("/")
+        }
+
+        
+    },[] )
 
     const [message, setMessage] = useState()
     //dieser usestate nur zum style
@@ -27,6 +36,9 @@ const Login = () => {
 
             if(response.ok) {
                 const data = await response.json()
+                console.log("DATA", data)
+                localStorage.setItem("token", data.token)
+                localStorage.setItem("id", data.userID)
                 setMessageAlertClass("alert alert-success")
                 setMessage("Login succesful.You get redirected")
                 setTimeout( ()=> {
