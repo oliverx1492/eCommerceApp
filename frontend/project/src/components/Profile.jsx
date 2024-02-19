@@ -38,10 +38,26 @@ const Profile = () => {
     let id
 
     useEffect(() => {
-        id = localStorage.getItem("id")
-        console.log(JSON.stringify(id))
 
-        fetchProfileInfo(id)
+        
+        const token = localStorage.getItem("token")
+        if(token) {
+            
+            id = localStorage.getItem("id")
+            console.log(JSON.stringify(id))
+    
+            fetchProfileInfo(id)
+
+
+        }
+
+        else {
+            navigate("/login")
+        }
+    
+
+        
+        
 
     }, [])
 

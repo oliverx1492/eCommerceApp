@@ -69,6 +69,7 @@ const Login = () => {
         <div className="login">
 
             <div className="card col-md-6 rounded">
+                <Link to="/">Home</Link>
 
                 <div className="card-body">
                     <h1>Login</h1>

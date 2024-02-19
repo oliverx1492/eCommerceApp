@@ -6,16 +6,16 @@ const Home = () =>  {
 
     const navigate = useNavigate()
 
-    useEffect( ()=> {
-        const token = localStorage.getItem("token")
-        if(token) {
-            console.log("HOME")
-        }
+    // useEffect( ()=> {
+    //     const token = localStorage.getItem("token")
+    //     if(token) {
+    //         console.log("HOME")
+    //     }
 
-        else {
-            navigate("/login")
-        }
-    },[] )
+    //     else {
+    //         navigate("/login")
+    //     }
+    // },[] )
 
    
     

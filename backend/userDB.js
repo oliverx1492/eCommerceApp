@@ -7,7 +7,8 @@ userDB.serialize(() => {
     CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT, 
         username TEXT, 
-        password TEXT
+        password TEXT,
+        isAdmin BOOLEAN DEFAULT 0
         )`)
 })
 

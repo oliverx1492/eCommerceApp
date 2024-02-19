@@ -8,8 +8,11 @@ const jwt = require("jsonwebtoken")
 //Datenbank für Login
 const userDB = require("./userDB")
 
-//Datenbank für Onlineshop
+//Datenbank für ProfilDaten
 const profileDB = require("./profileDB")
+
+//Datenbank für Catalog
+const catalogDB = require("./catalogDB")
 
 
 app.use(bodyParser.json())
@@ -18,6 +21,91 @@ app.use(cors())
 app.get("/", (req, res) => {
     res.send("Hello Backend")
 })
+
+app.post("/checkAdmin", (req,res)=> {
+    
+    const id = parseInt(req.body.id)
+    
+
+    userDB.get("SELECT * FROM users WHERE id = ?", [id], (err, user)=> {
+      
+        if(err) {
+            console.log(err)
+            return res.status(500).json({message: "Internal Server Error"})
+        }
+
+        if(user) {
+            
+            return res.json({isAdmin: user.isAdmin})
+        } else {
+            console.log("User not found"); // Protokolliere, wenn kein Benutzer gefunden wurde
+        }
+        
+        
+    })
+
+
+})
+
+
+app.post("/addCatalog", (req,res)=> {
+    console.log(req.body)
+
+    catalogDB.run("INSERT INTO catalog (img, name, artist, price) VALUES (?,?,?,?) ", 
+    [req.body.img, req.body.name, req.body.artist, req.body.price], (err)=> {
+        if(err) {
+            console.log(err)
+            return res.status(500).json({message: "Internal Server Error"})
+        }
+
+        res.json({message: "Picture added"})
+    })
+
+})
+
+app.get("/getCatalog", (req,res)=> {
+
+    catalogDB.all("SELECT * from catalog", (err,row)=> {
+        if(err) {
+            console.log(err)
+            return res.status(500).json({message: "Internal Server Error"})
+        }
+
+        console.log(row)
+        res.json(row)
+        
+    })
+
+    
+})
+
+const setAdmin = () => {
+    const username = "admin"
+    const password = "admin"
+    const isAdmin = true
+
+    userDB.get("SELECT * FROM users WHERE username = ?", [username], (err, user) => {
+        if (err) {
+            console.log(err)
+        }
+
+        if (user) {
+            console.log(user)
+        }
+
+        userDB.run("INSERT INTO users (username, password, isAdmin) VALUES (?,?,?)",
+            [username, password, isAdmin], (err) => {
+                if (err) {
+                    console.log(err)
+                }
+            })
+    })
+
+}
+// funktion is auskommentriert weil sie schon exekutiert wurde
+//setAdmin()
+//admin braucht auch kein profileDB eintrag
+
 
 app.post("/signup", (req, res) => {
     console.log(req.body)
@@ -136,16 +224,16 @@ app.post("/editProfile", (req, res) => {
     email = ?,
     phone_number = ?,
     payment_method = ? WHERE id = ?  `, [
-            req.body.first_name, req.body.last_name, req.body.address, req.body.country, req.body.email
-            , req.body.phone_number, req.body.payment_method, req.body.id], (err) => {
-                if (err) {
-                    console.error('Fehler beim Aktualisieren des Profils:', err);
-                    res.status(500).send('Interner Serverfehler');
-                    return;
-                }
+        req.body.first_name, req.body.last_name, req.body.address, req.body.country, req.body.email
+        , req.body.phone_number, req.body.payment_method, req.body.id], (err) => {
+            if (err) {
+                console.error('Fehler beim Aktualisieren des Profils:', err);
+                res.status(500).send('Interner Serverfehler');
+                return;
+            }
 
-                res.json({message: "Profil erfolgreich aktualisiert"})
-            })
+            res.json({ message: "Profil erfolgreich aktualisiert" })
+        })
 
 
 
