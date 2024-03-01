@@ -1,10 +1,19 @@
 import React, { useEffect, useState } from "react";
 import Header from "./Header";
+import { Link, useNavigate } from "react-router-dom";
 
 
 const Catalog = () => {
 
     const [catalog, setCatalog] = useState()
+    const navigate = useNavigate()
+    const [loaded, setLoaded] = useState(false);
+    const [pagination, setPagination] = useState(8)
+
+    const showMore = () => {
+        setPagination(pagination + 8)
+    }
+
 
     const getCatalog = async () => {
 
@@ -32,39 +41,62 @@ const Catalog = () => {
 
     useEffect(() => {
         getCatalog()
+
+
+        const timer = setTimeout(() => {
+            setLoaded(true);
+        }, 250);
+
+        // Aufräumen
+        return () => clearTimeout(timer);
     }, [])
+
+    const showDetails = (id) => {
+        navigate(`/product/${id}`)
+    }
 
     return (
         <div>
             <Header />
-            <h1>Catalog</h1>
+            {loaded ?
 
+                (<div className="container container1">
+                    <div className="row container1">
+                        {catalog && catalog.slice(0, pagination).map((item, index) => (
+                            // <Link to="/product/1">
+                            <div onClick={() => showDetails(item.id)} key={index} className="col-sm-3 oCard">
+                                <div className="card h-100 imageCard">
 
+                                    <img className="card-img-top img-fluid h-75 imageHover" src={item.img} alt="Card image cap" />
 
-            <div className="container container1">
-                <div className="row container1">
-                    {catalog && catalog.map((item, index) => (
-                        <div key={index} className="col-sm-3 oCard">
-                            <div className="card h-100">
-                                <img className="card-img-top img-fluid h-75" src={item.img} alt="Card image cap" />
-                                <div className="card-body">
-                                    <h4 className="card-title">{item.name}</h4>
-                                    <h5>{item.artist}</h5>
-                                    <p className="card-text">Price: {item.price} €</p>
-                                    <button className="btn btn-success">Add to cart</button>
+                                    <div className="card-body">
+                                        <h4 className="card-title">{item.name}</h4>
+                                        <h5>{item.artist}</h5>
+                                        <hr />
+                                        <button className="btn btn-info">View</button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+
+                            // </Link>
+                        ))}
+                        <i onClick={showMore} className="plus bi bi-plus-lg"></i>
+
+                    </div>
+                </div>)
+
+                :
+
+                (<div className="" style={{height: "100vh", paddingTop: "200px"}}>
+                 
+                    <div className="spinner-border" role="status">
+                        
+                    <span className="sr-only"></span>
                 </div>
-            </div>
+                </div>)
 
 
-
-
-
-
-
+            }
 
 
         </div>

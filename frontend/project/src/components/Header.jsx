@@ -9,39 +9,42 @@ const Header = () => {
   // useState ob man admin ist
   const [isAdmin, setIsAdmin] = useState()
 
+  //Search input
+  const [search, setSearch] = useState()
+
   // hier werden die userinfos geladen und gecheckt ob man admin ist oder nicht
   const fetchProfileInfo = async (id) => {
     try {
-        const response = await fetch("http://localhost:5000/checkAdmin", {
-            method: "POST",
-            headers: {
-                "Content-type": "application/json"
-            },
-            body: JSON.stringify({ "id": id })
-        })
+      const response = await fetch("http://localhost:5000/checkAdmin", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json"
+        },
+        body: JSON.stringify({ "id": id })
+      })
 
-        if (response.ok) {
-            const data = await response.json()
-            
-            if(data.isAdmin == "1") {
-               
-                setIsAdmin(true)
-            }
-           
+      if (response.ok) {
+        const data = await response.json()
 
+        if (data.isAdmin == "1") {
+
+          setIsAdmin(true)
         }
 
-        else {
-            const data = await response.json()
-            console.log(data)
-        }
+
+      }
+
+      else {
+        const data = await response.json()
+        console.log(data)
+      }
     }
 
     catch (error) {
-        console.log(error)
+      console.log(error)
     }
 
-}
+  }
 
   const [isToken, setIsToken] = useState(false)
 
@@ -51,7 +54,7 @@ const Header = () => {
       setIsToken(true)
     }
     //wenn eine id im local storage ist, wird gecheckt ob der user angemeldet ist
-    if(id) {
+    if (id) {
       fetchProfileInfo(id)
     }
 
@@ -64,6 +67,16 @@ const Header = () => {
     localStorage.removeItem("id")
     navigate("/login")
     // location.reload()
+  }
+
+  const inputChange = (event) => {
+    
+    setSearch(event.target.value)
+  }
+
+  const submitSearch = () => {
+      
+      navigate(`/search/${search}`)
   }
 
 
@@ -89,8 +102,8 @@ const Header = () => {
           <div className="ms-auto d-none d-lg-block">
             <div className="input-group">
               <span className="border-info input-group-text bg-info text-white"><i className="fa-solid fa-magnifying-glass"></i></span>
-              <input type="text" className="form-control border-info" />
-              <button className="btn btn-info text-white">Search</button>
+              <input onChange={inputChange} type="text" className="form-control border-info" />
+              <button onClick={submitSearch} className="btn btn-info text-white">Search</button>
             </div>
           </div>
           <ul className="navbar-nav ms-auto ">
@@ -99,19 +112,17 @@ const Header = () => {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="link" to="/about"><p className="nav-link mx-2 text-uppercase" href="#">About Us</p></Link>
+              <Link className="link" to="/artists"><p className="nav-link mx-2 text-uppercase" href="#">Artists</p></Link>
             </li>
-            <li className="nav-item">
-              <Link className="link" to="/faq"><p className="nav-link mx-2 text-uppercase" href="#">FAQ</p></Link>
-            </li>
+            
 
           </ul>
           <ul className="navbar-nav ms-auto ">
-            <li className="nav-item">
+            {!isAdmin && <li className="nav-item">
               <Link className="link" to="/cart"><p className="nav-link mx-2 text-uppercase" href="#"><i className="fa-solid fa-cart-shopping me-1"></i> Shopping Cart</p></Link>
-            </li>
-            
-            
+            </li>}
+
+
             {isAdmin ? (<li className="nav-item">
               <Link className="link" to="/editCatalog"><p className="nav-link mx-2 text-uppercase" href="#"><i className="fa-solid fa-circle-user me-1"></i> Edit Catalog</p></Link>
             </li>) : (<li className="nav-item">
@@ -119,9 +130,9 @@ const Header = () => {
             </li>)}
 
             <li>
-              {isToken ? (<button onClick={logout} className="btn btn-info">LOGOUT</button>) : 
-              (<Link to="/login"><button className="btn btn-info">LOGIN</button></Link>)}
-              </li>
+              {isToken ? (<button onClick={logout} className="btn btn-info">LOGOUT</button>) :
+                (<Link to="/login"><button className="btn btn-info">LOGIN</button></Link>)}
+            </li>
           </ul>
         </div>
       </div>

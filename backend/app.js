@@ -79,6 +79,26 @@ app.get("/getCatalog", (req,res)=> {
     
 })
 
+
+
+app.post("/getProduct", (req,res) => {
+    console.log(req.body.id)
+    const id = parseInt(req.body.id)
+
+    catalogDB.get("SELECT * from catalog WHERE id = ?", [id], (err,row)=> {
+        if(err) {
+            console.log(err)
+            return res.status(500).json({message: "Internal Server Error"})
+        }
+
+        if(row) {
+            
+            res.json(row)
+        }
+    })
+
+})
+
 const setAdmin = () => {
     const username = "admin"
     const password = "admin"
@@ -238,6 +258,120 @@ app.post("/editProfile", (req, res) => {
 
 
 
+})
+
+app.post("/addCart", (req,res) => {
+    console.log(req.body)
+    const id = req.body.profileInfo.id
+
+    profileDB.get("SELECT shopping_cart FROM profile WHERE id = ?", [id], (err, row)=> {
+        if(err) {
+            res.status(500).json({message: "Internal Server Error"})
+        }
+        
+        console.log(row)
+
+        //Falls daten in shopping cart vorhanden sind werden sie hier reingeparst
+        let shoppingCartArray = []
+        if (row && row.shopping_cart) {
+            shoppingCartArray = JSON.parse(row.shopping_cart)
+        }
+
+        shoppingCartArray.push(req.body.product)
+        console.log("ARRAY: ", shoppingCartArray)
+
+        profileDB.run("UPDATE profile SET shopping_cart = ? WHERE id = ?", 
+        [JSON.stringify(shoppingCartArray), id],
+        (err)=> {
+            if(err) {
+                res.status(500).json({message: "Internal Server Error run"})
+            }
+
+            res.json({message: "Updated succesfully"})
+        })
+
+    })
+
+})
+
+app.post("/deleteCart", (req,res) => {
+    console.log(req.body)
+    //id = proctID, profileID ist profileID
+    const profile_id = req.body.profileID 
+    const productID = req.body.id
+
+    profileDB.get("SELECT shopping_cart FROM profile WHERE id = ?", [profile_id], (err, row)=> {
+        if(err) {
+            res.status(500).json({message: "Internal Server Error"})
+        }
+
+        let shoppingCartArray = []
+        shoppingCartArray = JSON.parse(row.shopping_cart)
+        console.log(shoppingCartArray)
+        const deletedCart = shoppingCartArray.filter(item => item.id !== productID)
+        console.log(deletedCart)
+
+
+        profileDB.run("UPDATE profile SET shopping_cart = ? WHERE id = ?", 
+        [JSON.stringify(deletedCart), profile_id], (err)=> {
+            if(err) {
+                res.status(500).json({message: "Internal Server Error"})
+            }
+
+            res.json({message: "Successfully deleted"})
+        })
+
+    })
+
+})
+
+app.post("/deleteWholeCart", (req,res) => {
+    profileDB.run("UPDATE profile SET shopping_cart = NULL WHERE id = ?", [req.body.id], (err)=> {
+        if (err) {
+            
+            res.status(500).json({message: "Internal Server Error"});
+        } else {
+            
+            res.status(200).json({message: "erfolgreich gelöscht"});
+        }
+    })
+   
+    
+
+})
+
+app.post("/search", (req,res)=> {
+    console.log(req.body)
+
+    catalogDB.all("SELECT * FROM catalog WHERE artist LIKE '%' || ? || '%' OR name LIKE '%' || ? || '%'", 
+    [req.body.search, req.body.search], (err,rows)=> {
+        if(err) {
+            console.log(err)
+            return res.status(500).json({message: "Internal Server Error"})
+        }
+
+        if (rows.length > 0) {
+            console.log(rows);
+            return res.json(rows); // Send the found rows as JSON response
+        } else {
+            return res.status(500).json({ message: "Nothing found" });
+        }
+    })
+
+})
+
+app.get("/artists", (req,res)=> {
+
+    catalogDB.all("SELECT artist FROM catalog", (err, row) => {
+        if(err) {
+            console.log(err)
+        }
+
+        if(row) {
+            console.log(row)
+            res.json({artists: row})
+        }
+    })
 })
 
 app.listen(port, () => {

@@ -8,9 +8,12 @@ import Test from './components/Test'
 import Profile from './components/Profile';
 import ShoppingCart from './components/ShoppingCart';
 import Catalog from './components/Catalog';
-import About from './components/About';
+import Artists from './components/Artists';
 import FAQ from './components/FAQ';
 import EditCatalog from './components/EditCatalog';
+import Product from './components/Poduct';
+import Checkout from './components/Checkout';
+import Search from './components/Search';
 
 
 function App() {
@@ -44,12 +47,16 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
 
+          <Route path="/search/:id" element={<Search />}/>
+
           <Route path="/catalog" element={<Catalog />} />
-          <Route path="/about" element={<About />} />
+          <Route path="/artists" element={<Artists />} />
           <Route path="/faq" element={<FAQ />} />
+          <Route path="/product/:id" element={<Product />}/>
 
           <Route path="/profile" element={<Profile />} /> 
           <Route path="/cart" element={<ShoppingCart />} />
+          <Route path="/checkout" element={<Checkout />} />
 
           <Route path="/editCatalog" element={<EditCatalog />} />
          

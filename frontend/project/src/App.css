@@ -47,3 +47,58 @@
 }
 
 
+.productCard {
+  padding: 20px;
+
+}
+
+.productInfo {
+  padding: 20px;
+}
+
+.imageCard {
+  overflow: hidden; 
+}
+
+.imageCard img {
+  width: 100%; /* Bild füllt den Container */
+  height: auto; /* Automatische Höhe */
+  transition: transform 0.7s ease; 
+}
+
+.imageHover:hover {
+  transform: scale(1.1);
+}
+
+.checkout {
+  background-color: rgb(245, 149, 149);
+  padding-top: 20px;
+  padding-bottom: 20px;
+  box-shadow: inset;
+  margin: 10px;
+}
+
+.each-slide-effect > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+  height: 78vh;
+}
+
+.home-text {
+  height: 100vh;
+}
+
+.iconDown {
+  font-size: 7vh;
+  
+}
+
+.plus {
+  font-size: 6vh;
+}
+
+ul {
+  list-style-type: none;
+}
