@@ -27,5 +27,6 @@ There are two users pre-registerd.
 One is the admin (username: admin, password: admin). The admin can add new pictures in the database
 The second user (username: oliver, password: 1111) can "buy" the paintings. You can also create another user on the sign up Page
 
+There is also a searchbar where you can search for specific paintings or artists. On the artists page you can see all artists
 On the catalog page you will find all available paintings, when clicking on it you will see a more detailed card. There you can add it
 to your shopping cart and once you are finished you can checkout. 
