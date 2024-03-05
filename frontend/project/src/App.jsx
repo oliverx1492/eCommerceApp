@@ -14,6 +14,7 @@ import EditCatalog from './components/EditCatalog';
 import Product from './components/Poduct';
 import Checkout from './components/Checkout';
 import Search from './components/Search';
+import NotFound from "./components/NotFound"
 
 
 function App() {
@@ -59,6 +60,8 @@ function App() {
           <Route path="/checkout" element={<Checkout />} />
 
           <Route path="/editCatalog" element={<EditCatalog />} />
+
+          <Route path ="*" element={<NotFound />} />
          
 
 
