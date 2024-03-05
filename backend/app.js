@@ -4,6 +4,7 @@ const port = 5000
 const cors = require("cors")
 const bodyParser = require('body-parser');
 const jwt = require("jsonwebtoken")
+const path = require("path")
 
 //Datenbank für Login
 const userDB = require("./userDB")
@@ -13,6 +14,11 @@ const profileDB = require("./profileDB")
 
 //Datenbank für Catalog
 const catalogDB = require("./catalogDB")
+
+//Die statischen Files aus dem gebuildeten JS Frontend
+
+
+app.use(express.static(path.join(__dirname, '../frontend/project/dist')));
 
 
 app.use(bodyParser.json())
