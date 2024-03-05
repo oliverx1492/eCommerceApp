@@ -18,7 +18,7 @@ const catalogDB = require("./catalogDB")
 //Die statischen Files aus dem gebuildeten JS Frontend
 
 
-app.use(express.static(path.join(__dirname, '../frontend/project/dist')));
+//app.use(express.static(path.join(__dirname, '../frontend/project/dist')));
 
 
 app.use(bodyParser.json())
